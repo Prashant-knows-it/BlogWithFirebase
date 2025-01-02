@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Blog</title>
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+    <!-- Firebase JS -->
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-storage-compat.js"></script>
+    <style>
+        #editor-container {
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: #fff;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Blog Post</h1>
+    <form th:action="@{/admin/blog/create}" th:object="${blogPost}" method="post">
+        <label for="title">Title:</label>
+        <input type="text" id="title" th:field="*{title}" required><br><br>
+
+        <label for="content">Content:</label><br>
+        <div id="editor-container"></div>
+        <textarea id="content" th:field="*{content}" style="display: none;" required></textarea><br><br>
+
+        <label for="category">Category:</label>
+        <select id="category" th:field="*{category.id}" required>
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+        </select><br><br>
+
+        <input type="hidden" th:field="*{authorName}" th:value="${#authentication.name}">
+        <button type="submit">Create Blog</button>
+    </form>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqCvWnAnrECK47tMjptPL7DCAgV8zz99g",
+            authDomain: "blogwithspringboot.firebaseapp.com",
+            projectId: "blogwithspringboot",
+            storageBucket: "blogwithspringboot.appspot.com",
+            messagingSenderId: "1079045990319",
+            appId: "1:1079045990319:web:6c47a9188237ef318bb15a",
+            measurementId: "G-7MPYVTZ53P"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        // Initialize Quill Editor
+        document.addEventListener("DOMContentLoaded", function () {
+            const quill = new Quill('#editor-container', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['blockquote', 'code-block'],
+                        [{ 'header': 1 }, { 'header': 2 }],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        [{ 'indent': '-1' }, { 'indent': '+1' }],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                        ['clean'],
+                        ['image']
+                    ]
+                }
+            });
+
+            quill.on('text-change', function () {
+                document.getElementById('content').value = quill.root.innerHTML;
+            });
+        });
+
+        // Upload Image to Firebase
+        async function uploadImageToFirebase(file) {
+            const storageRef = storage.ref();
+            const imageRef = storageRef.child(`blog-images/${Date.now()}_${file.name}`);
+            const snapshot = await imageRef.put(file);
+            return await snapshot.ref.getDownloadURL();
+        }
+    </script>
+</body>
+</html>
