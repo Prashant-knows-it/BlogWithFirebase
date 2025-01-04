@@ -1,23 +1,97 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
-    <header style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f4f4f4;">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header div.logo {
+            font-weight: bold;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+
+        header form {
+            display: flex;
+            align-items: center;
+        }
+
+        header form input[type="text"] {
+            padding: 7px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 8px;
+            outline: none;
+        }
+
+        header form input[type="text"]:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        header form button {
+            padding: 8px 15px;
+            border: none;
+            background-color: white;
+            color: #4CAF50;
+            border: 1px solid white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header form button:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        header div.user-info a {
+            text-decoration: none;
+            color: white;
+            margin-left: 15px;
+            font-size: 0.95rem;
+            padding: 7px 12px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        header div.user-info a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <header>
         <!-- Logo -->
-        <div style="font-weight: bold; font-size: 1.5rem;">
-            COOLWEBSITE
-        </div>
+        <div class="logo">COOLWEBSITE</div>
 
         <!-- Search -->
-        <form action="/search" method="get" style="display: inline;">
-            <input type="text" name="query" placeholder="Search blog posts" />
+        <form action="/search" method="get">
+            <input type="text" name="query" placeholder="Search blog posts">
             <button type="submit">Search</button>
         </form>
-        
 
         <!-- User Info -->
-        <div>
-            <a href="/admin/manage" sec:authorize="hasRole('ADMIN')" style="text-decoration: none; margin-right: 10px;">Manage</a>
-            <span sec:authorize="isAuthenticated()" th:text="${#authentication.name}" style="margin-right: 10px;"></span>
-            <a href="/logout" sec:authorize="isAuthenticated()" style="text-decoration: none;">Logout</a>
+        <div class="user-info">
+            <a href="/admin/manage" sec:authorize="hasRole('ADMIN')">Manage</a>
+            <a href="/login" sec:authorize="isAnonymous()">Login</a>
         </div>
     </header>
+</body>
 </html>
