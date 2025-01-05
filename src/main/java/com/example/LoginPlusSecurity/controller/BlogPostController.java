@@ -73,14 +73,30 @@ public class BlogPostController {
     
 
     @GetMapping("/page/{pageNumber}")
-    public String showPaginatedHomePage(@PathVariable int pageNumber, Model model) {
+    public String showPaginatedHomePage(
+            @PathVariable int pageNumber,
+            @RequestParam(required = false, defaultValue = "") String query,
+            @RequestParam(required = false, defaultValue = "latest") String sortBy,
+            Model model) {
         int size = 5; // Fixed size, 5 blog/page
-        Page<BlogPost> blogPosts = blogPostService.getPaginatedBlogPosts(pageNumber, size);
+        Page<BlogPost> blogPosts;
+
+        if (!query.isEmpty()) {
+            // Search with filter
+            blogPosts = blogPostService.searchFilteredBlogPosts(query, pageNumber, size, sortBy);
+        } else {
+            // Regular filter
+            blogPosts = blogPostService.getFilteredBlogPosts(pageNumber, size, sortBy);
+        }
+
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", blogPosts.getTotalPages());
+        model.addAttribute("query", query);
+        model.addAttribute("sortBy", sortBy);
         return "home";
     }
+
 
 
     @GetMapping("/blog/{slug}")

@@ -109,39 +109,51 @@
         <!-- Main Content -->
         <main class="main-content">
             <!-- Filter Options -->
-            <div class="filter-options">
+            <div class="filter-options" style="margin-bottom: 15px;">
                 <span>Sort By:</span>
-                <a href="/?filter=latest" class="filter-option" th:classappend="${filter == 'latest'} ? 'active' : ''">Latest</a>
-                <a href="/?filter=oldest" class="filter-option" th:classappend="${filter == 'oldest'} ? 'active' : ''">Oldest</a>
-                <a href="/?filter=views" class="filter-option" th:classappend="${filter == 'views'} ? 'active' : ''">Most Views</a>
-                <a href="/?filter=comments" class="filter-option" th:classappend="${filter == 'comments'} ? 'active' : ''">Most Comments</a>
+                <a href="/page/0?sortBy=latest" 
+                   class="filter-option" 
+                   th:classappend="${sortBy == 'latest'} ? 'active' : ''" 
+                   style="margin-right: 10px; text-decoration: none; color: black; font-weight: bold;">Latest</a>
+                <a href="/page/0?sortBy=oldest" 
+                   class="filter-option" 
+                   th:classappend="${sortBy == 'oldest'} ? 'active' : ''" 
+                   style="margin-right: 10px; text-decoration: none; color: black; font-weight: bold;">Oldest</a>
+                <a href="/page/0?sortBy=views" 
+                   class="filter-option" 
+                   th:classappend="${sortBy == 'views'} ? 'active' : ''" 
+                   style="margin-right: 10px; text-decoration: none; color: black; font-weight: bold;">Most Viewed</a>
+                <a href="/page/0?sortBy=comments" 
+                   class="filter-option" 
+                   th:classappend="${sortBy == 'comments'} ? 'active' : ''" 
+                   style="text-decoration: none; color: black; font-weight: bold;">Most Comments</a>
             </div>
-
+        
             <!-- Blog Posts -->
             <div>
-                <div th:each="blogPost : ${blogPosts}" style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
+                <div th:each="blogPost : ${blogPosts}" 
+                     style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
                     <h2 th:text="${blogPost.title}"></h2>
                     <p>Author: <span th:text="${blogPost.authorName}"></span></p>
                     <p th:utext="${blogPost.excerpt}"></p>
-                    <a th:href="@{'/blog/' + ${blogPost.slug}}">Read More</a>
+                    <a th:href="@{'/blog/' + ${blogPost.slug}}" 
+                       style="color: blue; text-decoration: underline;">Read More</a>
                 </div>
             </div>
-
+        
             <!-- Pagination -->
-            <div class="pagination">
+            <div class="pagination" style="margin-top: 20px;">
                 <a th:if="${currentPage > 0}" 
-                   th:href="'/page/' + (${currentPage - 1})">Previous</a>
+                   th:href="'/page/' + (${currentPage - 1}) + '?sortBy=' + ${sortBy}" 
+                   style="margin-right: 10px; color: blue; text-decoration: underline;">Previous</a>
                 <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
                 <a th:if="${currentPage + 1 < totalPages}" 
-                   th:href="'/page/' + (${currentPage + 1})">Next</a>
+                   th:href="'/page/' + (${currentPage + 1}) + '?sortBy=' + ${sortBy}" 
+                   style="margin-left: 10px; color: blue; text-decoration: underline;">Next</a>
             </div>
         </main>
-
-    </div>
-</body>
-</html>
-
-
-
-
-<!-- Cateory needs fixing, apply dynamic filteration -->
+        
+    
+        </div>
+    </body>
+    </html>
