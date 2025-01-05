@@ -43,32 +43,33 @@ public class BlogPostController {
 
 
     @GetMapping("/")
-        public String showHomePage(@RequestParam(defaultValue = "latest") String filter, 
+    public String showHomePage(@RequestParam(defaultValue = "latest") String filter, 
                                 @RequestParam(defaultValue = "0") int page, 
                                 Model model) {
-            int size = 5; // Number of blog per page
-            Page<BlogPost> blogPosts = blogPostService.getFilteredBlogPosts(page, size, filter);
-            model.addAttribute("blogPosts", blogPosts.getContent());
-            model.addAttribute("currentPage", page);
-            model.addAttribute("totalPages", blogPosts.getTotalPages());
-            model.addAttribute("filter", filter);
-            return "home";
-        }
+        int size = 5; // Number of blog per page
+        Page<BlogPost> blogPosts = blogPostService.getFilteredBlogPosts(page, size, filter);
+        model.addAttribute("blogPosts", blogPosts.getContent());
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", blogPosts.getTotalPages());
+        model.addAttribute("filter", filter);
+        return "home";
+    }
 
-        @GetMapping("/search")
-        public String searchBlogPosts(@RequestParam("query") String query, 
+    @GetMapping("/search")
+    public String searchBlogPosts(@RequestParam("query") String query, 
                                     @RequestParam(defaultValue = "latest") String filter, 
                                     @RequestParam(defaultValue = "0") int page, 
                                     Model model) {
-            int size = 5; // Fixed size
-            Page<BlogPost> blogPosts = blogPostService.searchFilteredBlogPosts(query, page, size, filter);
-            model.addAttribute("blogPosts", blogPosts.getContent());
-            model.addAttribute("currentPage", page);
-            model.addAttribute("totalPages", blogPosts.getTotalPages());
-            model.addAttribute("query", query);
-            model.addAttribute("filter", filter);
-            return "searchResults";
-        }
+        int size = 5; // Fixed size
+        Page<BlogPost> blogPosts = blogPostService.searchFilteredBlogPosts(query, page, size, filter);
+        model.addAttribute("blogPosts", blogPosts.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", blogPosts.getTotalPages());
+        model.addAttribute("query", query);
+        model.addAttribute("filter", filter);
+        return "searchResults";
+    }
     
 
     @GetMapping("/page/{pageNumber}")
