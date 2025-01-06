@@ -134,7 +134,7 @@
                     <p>Author: <span th:text="${blogPost.authorName}"></span></p>
                     <p th:utext="${blogPost.excerpt}"></p>
                     <a th:href="@{'/blog/' + ${blogPost.slug}}" 
-                       style="color: blue; text-decoration: underline;">Read More</a>
+                       style="color: #4CAF50; text-decoration: underline;">Read More</a>
                 </div>
             </div>
         
@@ -142,11 +142,11 @@
             <div class="pagination" style="margin-top: 20px;">
                 <a th:if="${currentPage > 0}" 
                    th:href="'/page/' + (${currentPage - 1})" 
-                   style="margin-right: 10px; color: blue; text-decoration: underline;">Previous</a>
+                   style="margin-right: 10px; color: #4CAF50; text-decoration: underline;">Previous</a>
                 <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
                 <a th:if="${currentPage + 1 < totalPages}" 
                    th:href="'/page/' + (${currentPage + 1})" 
-                   style="margin-left: 10px; color: blue; text-decoration: underline;">Next</a>
+                   style="margin-left: 10px; color: #4CAF50; text-decoration: underline;">Next</a>
             </div>
             
     

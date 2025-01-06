@@ -58,7 +58,7 @@ public class BlogPostController {
             sortBy = filter; // Update the sortBy if filter is provided
         }
         int size = 5;
-        Page<BlogPost> blogPosts = blogPostService.getFilteredBlogPosts(page, size, sortBy);
+        Page<BlogPost> blogPosts = blogPostService.normalSorting(page, size, sortBy);
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("currentPage", page);
@@ -73,7 +73,7 @@ public class BlogPostController {
                                     @RequestParam(defaultValue = "0") int page, 
                                     Model model) {
         int size = 5; // Fixed size
-        Page<BlogPost> blogPosts = blogPostService.searchFilteredBlogPosts(query, page, size, filter);
+        Page<BlogPost> blogPosts = blogPostService.titleWithSorting(query, page, size, filter);
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", blogPosts.getTotalPages());
@@ -88,7 +88,7 @@ public class BlogPostController {
                                         @ModelAttribute("sortBy") String sortBy, 
                                         Model model) {
         int size = 5;
-        Page<BlogPost> blogPosts = blogPostService.getFilteredBlogPosts(pageNumber, size, sortBy);
+        Page<BlogPost> blogPosts = blogPostService.normalSorting(pageNumber, size, sortBy);
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", blogPosts.getTotalPages());

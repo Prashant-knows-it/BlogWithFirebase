@@ -19,7 +19,7 @@ public class BlogPostService {
     }
 
 
-    public Page<BlogPost> getFilteredBlogPosts(int page, int size, String sortBy) {
+    public Page<BlogPost> normalSorting(int page, int size, String sortBy) {
         Sort sort;
         switch (sortBy) {
             case "oldest":
@@ -35,7 +35,7 @@ public class BlogPostService {
         return blogPostRepository.findAll(pageable);
     }
 
-    public Page<BlogPost> searchFilteredBlogPosts(String query, int page, int size, String sortBy) {
+    public Page<BlogPost> titleWithSorting(String query, int page, int size, String sortBy) {
         Sort sort;
         switch (sortBy) {
             case "oldest":
