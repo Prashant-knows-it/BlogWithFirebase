@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.LoginPlusSecurity.model.BlogPost;
@@ -20,6 +21,7 @@ import com.example.LoginPlusSecurity.repository.CommentRepository;
 import com.example.LoginPlusSecurity.service.BlogPostService;
 
 @Controller
+@SessionAttributes("sortBy")
 public class BlogPostController {
 
     private final BlogPostService blogPostService;
@@ -41,21 +43,30 @@ public class BlogPostController {
         return "manage";
     }
 
+    @ModelAttribute("sortBy")
+    public String sortBy() {
+        return "latest"; // Default sort
+    }
+
 
     @GetMapping("/")
-    public String showHomePage(@RequestParam(defaultValue = "latest") String filter, 
+    public String showHomePage(@RequestParam(required = false) String filter, 
                                 @RequestParam(defaultValue = "0") int page, 
+                                @ModelAttribute("sortBy") String sortBy,
                                 Model model) {
-        int size = 5; // Number of blog per page
-        Page<BlogPost> blogPosts = blogPostService.getFilteredBlogPosts(page, size, filter);
+        if (filter != null) {
+            sortBy = filter; // Update the sortBy if filter is provided
+        }
+        int size = 5;
+        Page<BlogPost> blogPosts = blogPostService.getFilteredBlogPosts(page, size, sortBy);
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", blogPosts.getTotalPages());
-        model.addAttribute("filter", filter);
+        model.addAttribute("sortBy", sortBy);
         return "home";
     }
-
+    
     @GetMapping("/search")
     public String searchBlogPosts(@RequestParam("query") String query, 
                                     @RequestParam(defaultValue = "latest") String filter, 
@@ -73,30 +84,17 @@ public class BlogPostController {
     
 
     @GetMapping("/page/{pageNumber}")
-    public String showPaginatedHomePage(
-            @PathVariable int pageNumber,
-            @RequestParam(required = false, defaultValue = "") String query,
-            @RequestParam(required = false, defaultValue = "latest") String sortBy,
-            Model model) {
-        int size = 5; // Fixed size, 5 blog/page
-        Page<BlogPost> blogPosts;
-
-        if (!query.isEmpty()) {
-            // Search with filter
-            blogPosts = blogPostService.searchFilteredBlogPosts(query, pageNumber, size, sortBy);
-        } else {
-            // Regular filter
-            blogPosts = blogPostService.getFilteredBlogPosts(pageNumber, size, sortBy);
-        }
-
+    public String showPaginatedHomePage(@PathVariable int pageNumber, 
+                                        @ModelAttribute("sortBy") String sortBy, 
+                                        Model model) {
+        int size = 5;
+        Page<BlogPost> blogPosts = blogPostService.getFilteredBlogPosts(pageNumber, size, sortBy);
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", blogPosts.getTotalPages());
-        model.addAttribute("query", query);
         model.addAttribute("sortBy", sortBy);
         return "home";
     }
-
 
 
     @GetMapping("/blog/{slug}")

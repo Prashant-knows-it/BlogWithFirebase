@@ -111,23 +111,20 @@
             <!-- Filter Options -->
             <div class="filter-options" style="margin-bottom: 15px;">
                 <span>Sort By:</span>
-                <a href="/page/0?sortBy=latest" 
-                   class="filter-option" 
-                   th:classappend="${sortBy == 'latest'} ? 'active' : ''" 
-                   style="margin-right: 10px; text-decoration: none; color: black; font-weight: bold;">Latest</a>
-                <a href="/page/0?sortBy=oldest" 
-                   class="filter-option" 
-                   th:classappend="${sortBy == 'oldest'} ? 'active' : ''" 
-                   style="margin-right: 10px; text-decoration: none; color: black; font-weight: bold;">Oldest</a>
-                <a href="/page/0?sortBy=views" 
-                   class="filter-option" 
-                   th:classappend="${sortBy == 'views'} ? 'active' : ''" 
-                   style="margin-right: 10px; text-decoration: none; color: black; font-weight: bold;">Most Viewed</a>
-                <a href="/page/0?sortBy=comments" 
-                   class="filter-option" 
-                   th:classappend="${sortBy == 'comments'} ? 'active' : ''" 
-                   style="text-decoration: none; color: black; font-weight: bold;">Most Comments</a>
+                <form action="/" method="get" style="display: inline;">
+                    <input type="hidden" name="filter" value="latest">
+                    <button type="submit" class="filter-option" th:classappend="${sortBy == 'latest'} ? 'active' : ''">Latest</button>
+                </form>
+                <form action="/" method="get" style="display: inline;">
+                    <input type="hidden" name="filter" value="oldest">
+                    <button type="submit" class="filter-option" th:classappend="${sortBy == 'oldest'} ? 'active' : ''">Oldest</button>
+                </form>
+                <form action="/" method="get" style="display: inline;">
+                    <input type="hidden" name="filter" value="views">
+                    <button type="submit" class="filter-option" th:classappend="${sortBy == 'views'} ? 'active' : ''">Most Viewed</button>
+                </form>
             </div>
+            
         
             <!-- Blog Posts -->
             <div>
@@ -144,15 +141,14 @@
             <!-- Pagination -->
             <div class="pagination" style="margin-top: 20px;">
                 <a th:if="${currentPage > 0}" 
-                   th:href="'/page/' + (${currentPage - 1}) + '?sortBy=' + ${sortBy}" 
+                   th:href="'/page/' + (${currentPage - 1})" 
                    style="margin-right: 10px; color: blue; text-decoration: underline;">Previous</a>
                 <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
                 <a th:if="${currentPage + 1 < totalPages}" 
-                   th:href="'/page/' + (${currentPage + 1}) + '?sortBy=' + ${sortBy}" 
+                   th:href="'/page/' + (${currentPage + 1})" 
                    style="margin-left: 10px; color: blue; text-decoration: underline;">Next</a>
             </div>
-        </main>
-        
+            
     
         </div>
     </body>
