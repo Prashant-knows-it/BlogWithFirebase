@@ -58,7 +58,7 @@ public class BlogPostController {
             sortBy = filter; // Update the sortBy if filter is provided
         }
         int size = 5;
-        Page<BlogPost> blogPosts = blogPostService.normalSorting(page, size, sortBy);
+        Page<BlogPost> blogPosts = blogPostService.homepageSorting(page, size, sortBy);
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("currentPage", page);
@@ -73,7 +73,7 @@ public class BlogPostController {
                                     @RequestParam(defaultValue = "0") int page, 
                                     Model model) {
         int size = 5; // Fixed size
-        Page<BlogPost> blogPosts = blogPostService.titleWithSorting(query, page, size, filter);
+        Page<BlogPost> blogPosts = blogPostService.titleSorting(query, page, size, filter);
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", blogPosts.getTotalPages());
@@ -83,12 +83,29 @@ public class BlogPostController {
     }
     
 
+    @GetMapping("/category/{id}")
+    public String getBlogPostsByCategory(@PathVariable("id") Long categoryId,
+                                        @RequestParam(defaultValue = "latest") String filter,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        Model model) {
+        int size = 5; // Fixed size
+        Page<BlogPost> blogPosts = blogPostService.findByCategoryId(categoryId, page, size, filter);
+        model.addAttribute("blogPosts", blogPosts.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", blogPosts.getTotalPages());
+        model.addAttribute("filterCategoryId", categoryId);
+        model.addAttribute("filter", filter);
+        return "categoryResults";
+    }
+
+
+
     @GetMapping("/page/{pageNumber}")
     public String showPaginatedHomePage(@PathVariable int pageNumber, 
                                         @ModelAttribute("sortBy") String sortBy, 
                                         Model model) {
         int size = 5;
-        Page<BlogPost> blogPosts = blogPostService.normalSorting(pageNumber, size, sortBy);
+        Page<BlogPost> blogPosts = blogPostService.homepageSorting(pageNumber, size, sortBy);
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("totalPages", blogPosts.getTotalPages());

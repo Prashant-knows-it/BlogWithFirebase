@@ -98,10 +98,10 @@
             <h3>Categories</h3>
             <ul style="list-style-type: none; padding: 0;">
                 <li th:each="category : ${categories}" style="margin-bottom: 5px;">
-                    <a th:href="@{'/?categoryId=' + ${category.id}}" 
-                       th:text="${category.name}" 
-                       th:classappend="${category.id == filterCategoryId} ? 'active-category' : ''" 
-                       class="category-link"></a>
+                    <a th:href="@{'/category/' + ${category.id}}" 
+                    th:text="${category.name}" 
+                    th:classappend="${category.id == filterCategoryId} ? 'active-category' : ''" 
+                    class="category-link"></a>                  
                 </li>
             </ul>
         </aside>

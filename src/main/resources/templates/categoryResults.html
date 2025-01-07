@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Category Results</title>
+    <style>
+        /* Reuse the CSS from index.html for consistency */
+        body { font-family: Arial, sans-serif; }
+        .container { margin: 20px; }
+        .blog-post { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .pagination { text-align: center; margin-top: 20px; }
+        .pagination a { margin: 0 10px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="filter-options" style="margin-bottom: 15px;">
+        <span>Sort By:</span>
+        <form th:action="@{'/category/' + ${filterCategoryId}}" method="get" style="display: inline;">
+            <input type="hidden" name="filter" value="latest">
+            <button type="submit" class="filter-option" th:classappend="${filter == 'latest'} ? 'active' : ''">Latest</button>
+        </form>
+        <form th:action="@{'/category/' + ${filterCategoryId}}" method="get" style="display: inline;">
+            <input type="hidden" name="filter" value="oldest">
+            <button type="submit" class="filter-option" th:classappend="${filter == 'oldest'} ? 'active' : ''">Oldest</button>
+        </form>
+        <form th:action="@{'/category/' + ${filterCategoryId}}" method="get" style="display: inline;">
+            <input type="hidden" name="filter" value="views">
+            <button type="submit" class="filter-option" th:classappend="${filter == 'views'} ? 'active' : ''">Most Viewed</button>
+        </form>
+    </div>
+    
+    <div class="container">
+        <h1>Blogs in <span th:text="${categoryName}"></span></h1>
+        <div th:each="blogPost : ${blogPosts}" class="blog-post">
+            <h2 th:text="${blogPost.title}"></h2>
+            <p>Author: <span th:text="${blogPost.authorName}"></span></p>
+            <p th:utext="${blogPost.excerpt}"></p>
+            <a th:href="@{'/blog/' + ${blogPost.slug}}" style="color: #4CAF50; text-decoration: underline;">Read More</a>
+        </div>
+        <div class="pagination">
+            <a th:if="${currentPage > 0}" 
+               th:href="'/category/' + ${filterCategoryId} + '?page=' + (${currentPage - 1})" 
+               style="margin-right: 10px; color: #4CAF50; text-decoration: underline;">Previous</a>
+            <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
+            <a th:if="${currentPage + 1 < totalPages}" 
+               th:href="'/category/' + ${filterCategoryId} + '?page=' + (${currentPage + 1})" 
+               style="margin-left: 10px; color: #4CAF50; text-decoration: underline;">Next</a>
+        </div>
+    </div>
+</body>
+</html>

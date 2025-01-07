@@ -19,7 +19,7 @@ public class BlogPostService {
     }
 
 
-    public Page<BlogPost> normalSorting(int page, int size, String sortBy) {
+    public Page<BlogPost> homepageSorting(int page, int size, String sortBy) {
         Sort sort;
         switch (sortBy) {
             case "oldest":
@@ -35,7 +35,7 @@ public class BlogPostService {
         return blogPostRepository.findAll(pageable);
     }
 
-    public Page<BlogPost> titleWithSorting(String query, int page, int size, String sortBy) {
+    public Page<BlogPost> titleSorting(String query, int page, int size, String sortBy) {
         Sort sort;
         switch (sortBy) {
             case "oldest":
@@ -51,12 +51,29 @@ public class BlogPostService {
         return blogPostRepository.findByTitleContainingIgnoreCase(query, pageable);
     }
 
-
-
-    public Page<BlogPost> getPaginatedBlogPosts(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("creationDate").descending());
-        return blogPostRepository.findAll(pageable);
+    public Page<BlogPost> findByCategoryId(Long categoryId, int page, int size, String sortBy) {
+        Sort sort;
+        switch (sortBy) {
+            case "oldest":
+                sort = Sort.by("creationDate").ascending();
+                break;
+            case "views":
+                sort = Sort.by("views").descending();
+                break;
+            default: // latest blogs
+                sort = Sort.by("creationDate").descending();
+        }
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return blogPostRepository.findByCategoryId(categoryId, pageable);
     }
+
+
+
+
+    // public Page<BlogPost> getPaginatedBlogPosts(int page, int size) {
+    //     Pageable pageable = PageRequest.of(page, size, Sort.by("creationDate").descending());
+    //     return blogPostRepository.findAll(pageable);
+    // }
 
 
     public void saveBlogPost(BlogPost blogPost) {

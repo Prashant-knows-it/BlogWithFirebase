@@ -13,8 +13,11 @@ public interface BlogPostRepository extends JpaRepository<BlogPost, Long> {
     
     Optional<BlogPost> findBySlug(String slug);
 
+    // Unused (probably)
     List<BlogPost> findByTitleContainingIgnoreCase(String title); // For search
 
     Page<BlogPost> findByTitleContainingIgnoreCase(String title, Pageable pageable); // For filter
+
+    Page<BlogPost> findByCategoryId(Long categoryId, Pageable pageable);
 
 }
