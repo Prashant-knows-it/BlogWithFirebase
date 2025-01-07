@@ -51,7 +51,7 @@ public class BlogPostService {
         return blogPostRepository.findByTitleContainingIgnoreCase(query, pageable);
     }
 
-    public Page<BlogPost> findByCategoryId(Long categoryId, int page, int size, String sortBy) {
+    public Page<BlogPost> categorySorting(Long categoryId, int page, int size, String sortBy) {
         Sort sort;
         switch (sortBy) {
             case "oldest":
@@ -68,12 +68,6 @@ public class BlogPostService {
     }
 
 
-
-
-    // public Page<BlogPost> getPaginatedBlogPosts(int page, int size) {
-    //     Pageable pageable = PageRequest.of(page, size, Sort.by("creationDate").descending());
-    //     return blogPostRepository.findAll(pageable);
-    // }
 
 
     public void saveBlogPost(BlogPost blogPost) {

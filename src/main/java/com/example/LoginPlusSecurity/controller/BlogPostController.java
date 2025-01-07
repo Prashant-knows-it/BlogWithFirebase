@@ -89,7 +89,7 @@ public class BlogPostController {
                                         @RequestParam(defaultValue = "0") int page,
                                         Model model) {
         int size = 5; // Fixed size
-        Page<BlogPost> blogPosts = blogPostService.findByCategoryId(categoryId, page, size, filter);
+        Page<BlogPost> blogPosts = blogPostService.categorySorting(categoryId, page, size, filter);
         String categoryName = categoryRepository.getCategoryNameById(categoryId); // Fetch category name
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("currentPage", page);
