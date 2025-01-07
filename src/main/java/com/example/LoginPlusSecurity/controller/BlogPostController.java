@@ -90,10 +90,12 @@ public class BlogPostController {
                                         Model model) {
         int size = 5; // Fixed size
         Page<BlogPost> blogPosts = blogPostService.findByCategoryId(categoryId, page, size, filter);
+        String categoryName = categoryRepository.getCategoryNameById(categoryId); // Fetch category name
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", blogPosts.getTotalPages());
         model.addAttribute("filterCategoryId", categoryId);
+        model.addAttribute("categoryName", categoryName); // Add category name to the model
         model.addAttribute("filter", filter);
         return "categoryResults";
     }
