@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.LoginPlusSecurity.model.BlogPost;
@@ -21,7 +20,6 @@ import com.example.LoginPlusSecurity.repository.CommentRepository;
 import com.example.LoginPlusSecurity.service.BlogPostService;
 
 @Controller
-@SessionAttributes("sortBy")
 public class BlogPostController {
 
     private final BlogPostService blogPostService;
@@ -43,27 +41,18 @@ public class BlogPostController {
         return "manage";
     }
 
-    @ModelAttribute("sortBy")
-    public String sortBy() {
-        return "latest"; // Default sort
-    }
-
-
     @GetMapping("/")
-    public String showHomePage(@RequestParam(required = false) String filter, 
-                                @RequestParam(defaultValue = "0") int page, 
-                                @ModelAttribute("sortBy") String sortBy,
+    public String showHomePage(@RequestParam(defaultValue = "latest") String filter,
+                                @RequestParam(defaultValue = "0") int page,
                                 Model model) {
-        if (filter != null) {
-            sortBy = filter; // Update the sortBy if filter is provided
-        }
+    
         int size = 5;
-        Page<BlogPost> blogPosts = blogPostService.homepageSorting(page, size, sortBy);
+        Page<BlogPost> blogPosts = blogPostService.homepageSorting(page, size, filter);
         model.addAttribute("blogPosts", blogPosts.getContent());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", blogPosts.getTotalPages());
-        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("filter", filter);
         return "home";
     }
     

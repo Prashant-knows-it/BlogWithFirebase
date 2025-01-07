@@ -111,10 +111,11 @@
             <!-- Filter Options -->
             <div class="filter-options" style="margin-bottom: 15px;">
                 <span>Sort By:</span>
-                <a href="/?filter=latest" class="filter-option" th:classappend="${sortBy == 'latest'} ? 'active' : ''">Latest</a>
-                <a href="/?filter=oldest" class="filter-option" th:classappend="${sortBy == 'oldest'} ? 'active' : ''">Oldest</a>
-                <a href="/?filter=views" class="filter-option" th:classappend="${sortBy == 'views'} ? 'active' : ''">Most Viewed</a>
+                <a href="/?filter=latest&page=0" class="filter-option" th:classappend="${filter == 'latest'} ? 'active' : ''">Latest</a>
+                <a href="/?filter=oldest&page=0" class="filter-option" th:classappend="${filter == 'oldest'} ? 'active' : ''">Oldest</a>
+                <a href="/?filter=views&page=0" class="filter-option" th:classappend="${filter == 'views'} ? 'active' : ''">Most Viewed</a>
             </div>
+            
             
             
         
@@ -133,11 +134,11 @@
             <!-- Pagination -->
             <div class="pagination" style="margin-top: 20px;">
                 <a th:if="${currentPage > 0}" 
-                   th:href="'/page/' + (${currentPage - 1})" 
+                   th:href="'/?filter=' + ${filter} + '&page=' + (${currentPage - 1})" 
                    style="margin-right: 10px; color: #4CAF50; text-decoration: underline;">Previous</a>
                 <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
                 <a th:if="${currentPage + 1 < totalPages}" 
-                   th:href="'/page/' + (${currentPage + 1})" 
+                   th:href="'/?filter=' + ${filter} + '&page=' + (${currentPage + 1})" 
                    style="margin-left: 10px; color: #4CAF50; text-decoration: underline;">Next</a>
             </div>
             
