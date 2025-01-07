@@ -14,18 +14,15 @@
 <body>
     <div class="filter-options" style="margin-bottom: 15px;">
         <span>Sort By:</span>
-        <form th:action="@{'/category/' + ${filterCategoryId}}" method="get" style="display: inline;">
-            <input type="hidden" name="filter" value="latest">
-            <button type="submit" class="filter-option" th:classappend="${filter == 'latest'} ? 'active' : ''">Latest</button>
-        </form>
-        <form th:action="@{'/category/' + ${filterCategoryId}}" method="get" style="display: inline;">
-            <input type="hidden" name="filter" value="oldest">
-            <button type="submit" class="filter-option" th:classappend="${filter == 'oldest'} ? 'active' : ''">Oldest</button>
-        </form>
-        <form th:action="@{'/category/' + ${filterCategoryId}}" method="get" style="display: inline;">
-            <input type="hidden" name="filter" value="views">
-            <button type="submit" class="filter-option" th:classappend="${filter == 'views'} ? 'active' : ''">Most Viewed</button>
-        </form>
+        <a th:href="'/category/' + ${filterCategoryId} + '?filter=latest'" 
+           th:classappend="${filter == 'latest'} ? 'active' : ''" 
+           class="filter-option">Latest</a>
+        <a th:href="'/category/' + ${filterCategoryId} + '?filter=oldest'" 
+           th:classappend="${filter == 'oldest'} ? 'active' : ''" 
+           class="filter-option">Oldest</a>
+        <a th:href="'/category/' + ${filterCategoryId} + '?filter=views'" 
+           th:classappend="${filter == 'views'} ? 'active' : ''" 
+           class="filter-option">Most Viewed</a>
     </div>
     
     <div class="container">

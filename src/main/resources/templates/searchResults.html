@@ -59,22 +59,17 @@
         <!-- Filter Options -->
         <div class="filter-options">
             <span>Sort By:</span>
-            <form action="/search" method="get" style="display: inline;">
-                <input type="hidden" name="query" th:value="${query}">
-                <input type="hidden" name="filter" value="latest">
-                <button type="submit" class="filter-option" th:classappend="${filter == 'latest'} ? 'active' : ''">Latest</button>
-            </form>
-            <form action="/search" method="get" style="display: inline;">
-                <input type="hidden" name="query" th:value="${query}">
-                <input type="hidden" name="filter" value="oldest">
-                <button type="submit" class="filter-option" th:classappend="${filter == 'oldest'} ? 'active' : ''">Oldest</button>
-            </form>
-            <form action="/search" method="get" style="display: inline;">
-                <input type="hidden" name="query" th:value="${query}">
-                <input type="hidden" name="filter" value="views">
-                <button type="submit" class="filter-option" th:classappend="${filter == 'views'} ? 'active' : ''">Most Viewed</button>
-            </form>
+            <a th:href="'/search?query=' + ${query} + '&filter=latest'" 
+            th:classappend="${filter == 'latest'} ? 'active' : ''" 
+            class="filter-option">Latest</a>
+            <a th:href="'/search?query=' + ${query} + '&filter=oldest'" 
+            th:classappend="${filter == 'oldest'} ? 'active' : ''" 
+            class="filter-option">Oldest</a>
+            <a th:href="'/search?query=' + ${query} + '&filter=views'" 
+            th:classappend="${filter == 'views'} ? 'active' : ''" 
+            class="filter-option">Most Viewed</a>
         </div>
+
 
         <!-- Blog Posts -->
         <div>

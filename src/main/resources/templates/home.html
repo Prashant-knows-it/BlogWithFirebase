@@ -111,19 +111,11 @@
             <!-- Filter Options -->
             <div class="filter-options" style="margin-bottom: 15px;">
                 <span>Sort By:</span>
-                <form action="/" method="get" style="display: inline;">
-                    <input type="hidden" name="filter" value="latest">
-                    <button type="submit" class="filter-option" th:classappend="${sortBy == 'latest'} ? 'active' : ''">Latest</button>
-                </form>
-                <form action="/" method="get" style="display: inline;">
-                    <input type="hidden" name="filter" value="oldest">
-                    <button type="submit" class="filter-option" th:classappend="${sortBy == 'oldest'} ? 'active' : ''">Oldest</button>
-                </form>
-                <form action="/" method="get" style="display: inline;">
-                    <input type="hidden" name="filter" value="views">
-                    <button type="submit" class="filter-option" th:classappend="${sortBy == 'views'} ? 'active' : ''">Most Viewed</button>
-                </form>
+                <a href="/?filter=latest" class="filter-option" th:classappend="${sortBy == 'latest'} ? 'active' : ''">Latest</a>
+                <a href="/?filter=oldest" class="filter-option" th:classappend="${sortBy == 'oldest'} ? 'active' : ''">Oldest</a>
+                <a href="/?filter=views" class="filter-option" th:classappend="${sortBy == 'views'} ? 'active' : ''">Most Viewed</a>
             </div>
+            
             
         
             <!-- Blog Posts -->
