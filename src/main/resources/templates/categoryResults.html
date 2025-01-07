@@ -38,13 +38,14 @@
         </div>
         <div class="pagination">
             <a th:if="${currentPage > 0}" 
-               th:href="'/category/' + ${filterCategoryId} + '?page=' + (${currentPage - 1})" 
+               th:href="'/category/' + ${filterCategoryId} + '?filter=' + ${filter} + '&page=' + (${currentPage - 1})" 
                style="margin-right: 10px; color: #4CAF50; text-decoration: underline;">Previous</a>
             <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
             <a th:if="${currentPage + 1 < totalPages}" 
-               th:href="'/category/' + ${filterCategoryId} + '?page=' + (${currentPage + 1})" 
+               th:href="'/category/' + ${filterCategoryId} + '?filter=' + ${filter} + '&page=' + (${currentPage + 1})" 
                style="margin-left: 10px; color: #4CAF50; text-decoration: underline;">Next</a>
         </div>
+        
     </div>
 </body>
 </html>
