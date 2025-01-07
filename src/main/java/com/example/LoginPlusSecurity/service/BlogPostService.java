@@ -18,78 +18,49 @@ public class BlogPostService {
         this.blogPostRepository = blogPostRepository;
     }
 
-
     public Page<BlogPost> homepageSorting(int page, int size, String sortBy) {
-        Sort sort;
-        switch (sortBy) {
-            case "oldest":
-                sort = Sort.by("creationDate").ascending();
-                break;
-            case "views":
-                sort = Sort.by("views").descending();
-                break;
-            default: // latest
-                sort = Sort.by("creationDate").descending();
-        }
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = createPageable(page, size, sortBy);
         return blogPostRepository.findAll(pageable);
     }
 
     public Page<BlogPost> titleSorting(String query, int page, int size, String sortBy) {
-        Sort sort;
-        switch (sortBy) {
-            case "oldest":
-                sort = Sort.by("creationDate").ascending();
-                break;
-            case "views":
-                sort = Sort.by("views").descending();
-                break;
-            default: // latest blog
-                sort = Sort.by("creationDate").descending();
-        }
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = createPageable(page, size, sortBy);
         return blogPostRepository.findByTitleContainingIgnoreCase(query, pageable);
     }
 
     public Page<BlogPost> categorySorting(Long categoryId, int page, int size, String sortBy) {
-        Sort sort;
-        switch (sortBy) {
-            case "oldest":
-                sort = Sort.by("creationDate").ascending();
-                break;
-            case "views":
-                sort = Sort.by("views").descending();
-                break;
-            default: // latest blogs
-                sort = Sort.by("creationDate").descending();
-        }
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = createPageable(page, size, sortBy);
         return blogPostRepository.findByCategoryId(categoryId, pageable);
     }
 
-
-
-
     public void saveBlogPost(BlogPost blogPost) {
-        String slug = generateSlug(blogPost.getTitle());
-        blogPost.setSlug(slug);
+        blogPost.setSlug(generateSlug(blogPost.getTitle()));
         blogPostRepository.save(blogPost);
     }
 
-    
     public BlogPost findBySlug(String slug) {
         return blogPostRepository.findBySlug(slug)
                 .orElseThrow(() -> new RuntimeException("Blog post not found!"));
     }
 
-
     private String generateSlug(String title) {
-        String slug = title.toLowerCase() // Convert to lowercase
-                        .replaceAll("[^a-z0-9\\s-]", "") // Remove invalid characters
-                        .trim() // Remove leading and trailing spaces
-                        .replaceAll("\\s+", "-"); // Replace spaces with "-"
-        return slug.replaceAll("^-|-$", ""); // Remove leading/trailing "-"
+        return title.toLowerCase()
+                    .replaceAll("[^a-z0-9\\s-]", "")
+                    .trim()
+                    .replaceAll("\\s+", "-")
+                    .replaceAll("^-|-$", "");
     }
 
-    
+    private Pageable createPageable(int page, int size, String sortBy) {
+        Sort sort = getSortOrder(sortBy);
+        return PageRequest.of(page, size, sort);
+    }
+
+    private Sort getSortOrder(String sortBy) {
+        return switch (sortBy) {
+            case "oldest" -> Sort.by("creationDate").ascending();
+            case "views" -> Sort.by("views").descending();
+            default -> Sort.by("creationDate").descending(); // Default to latest
+        };
+    }
 }
