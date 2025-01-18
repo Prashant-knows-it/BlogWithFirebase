@@ -23,5 +23,10 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
     private String role;
+
+    @Column(length = 255)
+    private String description; // 30 words
+
 }

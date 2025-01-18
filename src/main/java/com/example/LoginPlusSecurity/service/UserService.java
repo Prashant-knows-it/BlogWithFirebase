@@ -1,9 +1,12 @@
 package com.example.LoginPlusSecurity.service;
 
-import com.example.LoginPlusSecurity.model.User;
-import com.example.LoginPlusSecurity.repository.UserRepository;
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.example.LoginPlusSecurity.model.User;
+import com.example.LoginPlusSecurity.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -20,5 +23,9 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("ROLE_USER");
         userRepository.save(user);
+    }
+
+    public Optional<User> getUserByName(String name) {
+        return userRepository.findByName(name);
     }
 }
