@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String role;
+    private String role = "ROLE_ADMIN";
 
     @Column(length = 255)
     private String description; // 30 words
