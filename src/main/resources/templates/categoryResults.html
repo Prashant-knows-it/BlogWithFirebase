@@ -11,26 +11,10 @@
             margin: 20px;
             gap: 20px;
         }
-        .sidebar {
-            width: 20%;
-            border-right: 1px solid #ddd;
-            padding: 10px;
-        }
-        .category-link {
-            display: block;
-            padding: 5px;
-            color: #333;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .category-link:hover {
-            color: #4CAF50; /* Change color on hover */
-        }
-        .category-link.active-category {
-            font-weight: bold; /* Highlight active category */
-        }
         .main-content {
-            width: 80%;
+            width: 100%;
+            margin: auto;
+            max-width: 800px;
         }
         .filter-options {
             display: flex;
@@ -73,70 +57,48 @@
     </style>
 </head>
 <body>
-
-    <!-- Header -->
     <div th:replace="header.html"></div>
 
-    <!-- Container -->
-    <div class="container">
-        
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <h3>Categories</h3>
-            <ul style="list-style-type: none; padding: 0;">
-                <li th:each="category : ${categories}" style="margin-bottom: 5px;">
-                    <a th:href="@{'/category/' + ${category.id}}" 
-                       th:text="${category.name}" 
-                       th:classappend="${category.id == filterCategoryId} ? 'active-category' : ''" 
-                       class="category-link"></a>
-                </li>
-            </ul>
-        </aside>
+    <div class="main-content">
+        <h1>Blogs in <span th:text="${categoryName}"></span></h1>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <h1>Blogs in <span th:text="${categoryName}"></span></h1>
+        <!-- Filter Options -->
+        <div class="filter-options">
+            <span>Sort By:</span>
+            <a th:href="'/category/' + ${filterCategoryId} + '?filter=latest'" 
+               th:classappend="${filter == 'latest'} ? 'active' : ''" 
+               class="filter-option">Latest</a>
+            <a th:href="'/category/' + ${filterCategoryId} + '?filter=oldest'" 
+               th:classappend="${filter == 'oldest'} ? 'active' : ''" 
+               class="filter-option">Oldest</a>
+            <a th:href="'/category/' + ${filterCategoryId} + '?filter=views'" 
+               th:classappend="${filter == 'views'} ? 'active' : ''" 
+               class="filter-option">Most Viewed</a>
+        </div>
 
-            <!-- Filter Options -->
-            <div class="filter-options">
-                <span>Sort By:</span>
-                <a th:href="'/category/' + ${filterCategoryId} + '?filter=latest'" 
-                   th:classappend="${filter == 'latest'} ? 'active' : ''" 
-                   class="filter-option">Latest</a>
-                <a th:href="'/category/' + ${filterCategoryId} + '?filter=oldest'" 
-                   th:classappend="${filter == 'oldest'} ? 'active' : ''" 
-                   class="filter-option">Oldest</a>
-                <a th:href="'/category/' + ${filterCategoryId} + '?filter=views'" 
-                   th:classappend="${filter == 'views'} ? 'active' : ''" 
-                   class="filter-option">Most Viewed</a>
+        <!-- Blog Posts -->
+        <div>
+            <p th:if="${#lists.isEmpty(blogPosts)}">No blogs available in this category.</p>
+            <div th:each="blogPost : ${blogPosts}" class="blog-post">
+                <h2 th:text="${blogPost.title}"></h2>
+                <p>Author: <span th:text="${blogPost.authorName}"></span></p>
+                <p th:utext="${blogPost.excerpt}"></p>
+                <a th:href="@{'/blog/' + ${blogPost.slug}}" style="color: #4CAF50; text-decoration: underline;">Read More</a>
             </div>
+        </div>
 
-            <!-- Blog Posts -->
-            <div>
-                <p th:if="${#lists.isEmpty(blogPosts)}">No blogs available in this category.</p>
-                <div th:each="blogPost : ${blogPosts}" class="blog-post">
-                    <h2 th:text="${blogPost.title}"></h2>
-                    <p>Author: <span th:text="${blogPost.authorName}"></span></p>
-                    <p th:utext="${blogPost.excerpt}"></p>
-                    <a th:href="@{'/blog/' + ${blogPost.slug}}" style="color: #4CAF50; text-decoration: underline;">Read More</a>
-                </div>
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination">
-                <a th:if="${currentPage > 0}" 
-                   th:href="'/category/' + ${filterCategoryId} + '?filter=' + ${filter} + '&page=' + (${currentPage - 1})">
-                    Previous
-                </a>
-                <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
-                <a th:if="${currentPage + 1 < totalPages}" 
-                   th:href="'/category/' + ${filterCategoryId} + '?filter=' + ${filter} + '&page=' + (${currentPage + 1})">
-                    Next
-                </a>
-            </div>
-        </main>
-
+        <!-- Pagination -->
+        <div class="pagination">
+            <a th:if="${currentPage > 0}" 
+               th:href="'/category/' + ${filterCategoryId} + '?filter=' + ${filter} + '&page=' + (${currentPage - 1})">
+                Previous
+            </a>
+            <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
+            <a th:if="${currentPage + 1 < totalPages}" 
+               th:href="'/category/' + ${filterCategoryId} + '?filter=' + ${filter} + '&page=' + (${currentPage + 1})">
+                Next
+            </a>
+        </div>
     </div>
-
 </body>
 </html>

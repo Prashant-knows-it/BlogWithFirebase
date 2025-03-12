@@ -25,9 +25,14 @@ public class UserController {
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
             return "user-details";
-        } else {
+        }
+        else {
             model.addAttribute("error", "User not found");
             return "error";
         }
     }
+//    @GetMapping("")
+//    public String userProfile() {
+//    	
+//    }
 }
