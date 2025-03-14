@@ -1,15 +1,139 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>User Details</title>
+	<title>User Details</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f4f4f9;
+			color: #333;
+		}
+
+		header {
+			background-color: #4CAF50;
+			padding: 10px 20px;
+			color: white;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			box-shadow: 0, 4px, 8px, rgba(0, 0, 0, 0.2);
+		}
+
+		header h1 {
+			margin: 0;
+			font-size: 1.5rem;
+		}
+
+		header form {
+			margin: 0;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 20px auto;
+			background: white;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			border-radius: 10px;
+			padding: 20px;
+		}
+
+		.container h2 {
+			font-size: 1.5rem;
+			margin-bottom: 10px;
+			color: #4CAF50;
+		}
+
+		.user-details p {
+			margin: 10px 0;
+			font-size: 1rem;
+		}
+
+		.blogs ul {
+			list-style: none;
+			padding: 0;
+		}
+
+		.blogs li {
+			margin: 10px 0;
+			font-size: 1rem;
+		}
+
+		.blogs a {
+			text-decoration: none;
+			color: #4CAF50;
+		}
+
+		.blogs a:hover {
+			text-decoration: underline;
+		}
+
+		.manage-btn,
+		.dashboard {
+			display: inline-block;
+			margin-top: 20px;
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px 20px;
+			text-align: center;
+			border-radius: 5px;
+			text-decoration: none;
+			font-size: 1rem;
+		}
+
+		.manage-btn:hover,
+		.dashboard:hover {
+			background-color: #45a049;
+		}
+
+		header .logout-button {
+			background: white;
+			color: #4CAF50;
+			border: none;
+			padding: 10px 15px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-weight: bold;
+			transition: background-color 0.3s;
+		}
+
+		header .logout-button:hover {
+			background-color: #43A047;
+			color: white;
+		}
+	</style>
 </head>
+
 <body>
-    <h1>User Details</h1>
-    <div>
-        <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
-        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-        <p><strong>Role:</strong> <span th:text="${user.role}"></span></p>
-        <p>Description: <span th:text="${user.description}">No description available</span></p>
-    </div>
+	<header>
+		<h1 th:text="${user.name} + ' Profile'"></h1>
+		<form action="/logout" method="post">
+			<button class="logout-button">Logout</button>
+		</form>
+	</header>
+
+	<div class="container">
+		<section class="user-details">
+			<h2>User Details</h2>
+			<p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+			<p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+			<p><strong>Role:</strong> <span th:text="${user.role}"></span></p>
+		</section>
+
+		<section class="blogs">
+			<h2>Blogs by <span th:text="${user.name}"></span></h2>
+			<ul>
+				<li th:each="blog : ${blogs}">
+					<a th:href="@{/blog/{id}(id=${blog.id})}" th:text="${blog.title}"></a>
+				</li>
+			</ul>
+		</section>
+
+		<span><a href="/admin/manage" class="manage-btn" sec:authorize="hasRole('ROLE_ADMIN')">Manage Blogs</a></span>
+		<span><a th:href="@{/}" class="dashboard">Go Back to Dashboard</a></span>
+	</div>
 </body>
+
 </html>

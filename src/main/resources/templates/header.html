@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+
 <head>
     <style>
         body {
@@ -80,7 +81,9 @@
             border-color: white;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
 <body>
     <header>
         <!-- Logo -->
@@ -96,9 +99,10 @@
 
         <!-- User Info -->
         <div class="user-info">
-            <a href="/admin/manage" sec:authorize="hasRole('ADMIN')">Manage</a>
-            <a href="/login" sec:authorize="isAnonymous()">Login</a>
+            <a th:href="@{/user/{username}(username=${#authentication.name})}" title="View Profile" sec:authorize="isAuthenticated()"><span th:text="${#authentication.name}"></span></a>
+			<a th:href="@{/login}" sec:authorize="isAnonymous()">Login</a>
         </div>
     </header>
 </body>
+
 </html>
